@@ -8,16 +8,82 @@ var addChat = function(){
 		return;
 	}
 	var htmlToAdd = "";
-	htmlToAdd+="<div id='chatBookMarklet_Id' style='font-family: Arial;position:fixed;background-color:red;bottom:0px;right:10px;width:320px;border-left:1px solid #000000;border-right:1px solid #000000;'>";
+	htmlToAdd+="<style>.chat-bubble{position:relative;display:inline-block;width:80%;min-height:25px;padding:5px;background:#fff;-webkit-border-radius:10px;-moz-border-radius:10px;border-radius:10px;margin-top:10px;font-size:14px;color:#000}bubble-header{width:100%;display:inline-block;font-size:17px}.chat-bubble,.sent{margin-right:10px;margin-left:10px}.chat-bubble:after{content:'';position:absolute;border-style:solid;border-color:transparent #fff;display:block;width:0;z-index:1;top:17px}.chat-bubble,.sent:after{border-width:5px 5px 5px 0;left:-5px}.chat-bubble,.received:after{border-width:5px 0 5px 5px;right:-5px}</style>";
+	
+	htmlToAdd+="<div id='chatBookMarklet_Id' style='font-family: Arial;position:fixed;bottom:0px;right:10px;width:320px;border-left:1px solid #000000;border-right:1px solid #000000;'>";
 	htmlToAdd+="   <div id='chatBookMarklet_HeaderId' style='width:100%;background-color: #462343;display: inline-block;padding:5px;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;color:#ffffff;'>";
 	htmlToAdd+="      <span id='connectionIndicator' style='display: inline-block;margin-left:5px;margin-top:5px;width: 15px;height: 15px;background-color : orange;' title='connecting...'></span>";
 	htmlToAdd+="      Titre_ti <span id='collapseButon' style='position: absolute;top: 0px;right: 5px;width: 15px;font-size:20px;'>-</span>";
 	htmlToAdd+="   </div>";
 	htmlToAdd+="   <div id='chatBookMarklet_toCollapseId' >";
+	htmlToAdd+="      <div id='chatBookMarklet_bodyId' style='width:90%;background-color:#efefef;padding: 1% 5%;display: inline-block;'>";
+	htmlToAdd+="         <div class='chat-bubble'> Welcome in Chatons!";
+	htmlToAdd+="         </div>";
+	htmlToAdd+="      </div>";
+	htmlToAdd+="      <div id='chatBookMarklet_footerId' style='width:100%;padding:10px 5%;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;'>";
+	htmlToAdd+="         <form action='' onsubmit='return false' autocomplete='off' >";
+	htmlToAdd+="            <input id='toSend' type='' style='width:80%;' />";
+	htmlToAdd+="            <button onClick='doSend()' value='notUsed' style='background-color: #462343;-moz-border-radius:6px;-webkit-border-radius:6px;border-radius:6px;border:1px solid #7f3b7c;display:inline-block;cursor:pointer;color:#ffffff;font-family:arial;font-size:12px;padding:5px 8px;text-decoration:none;'>Send</button>";	
+	htmlToAdd+="         </form>";	
+	htmlToAdd+="      </div>";
 	htmlToAdd+="   </div>";
-	htmlToAdd+="</div>";
+	htmlToAdd+="</div>";	
+	document.body.innerHTML += htmlToAdd;
 	
-	document.body.innerHTML += htmlToAdd;	
+	var url = "ws://91.125.244.57:8099/";
+	var subject = "To calculate from current url!";
+	console.log("component ready, fastFlicker url ="+url+" subject="+subject);
+
+	fastFlicker = new FastFlickerClient(url, subject);
+	fastFlicker.onMessage().subscribe(function (message) {
+		console.log('currentComponent.push(\'messages\', {class : "received", value : a});');
+		addBubble(message,"received");
+	});
+	fastFlicker.onError().subscribe(function (a) {
+		console.log('currentComponent.header = "Error, see console logs"');
+		changeIndicator('red', 'errors');
+	});
+	fastFlicker.onReady().subscribe(function () {
+		console.log("fastFlicker ready");
+		changeIndicator('green', 'connected');
+	});
+
+	fastFlicker.open();
+	
+	var btn = document.getElementById("collapseButon");
+	btn.onclick = function(){
+		var section = document.getElementById("chatBookMarklet_toCollapseId");
+		if(section.style.display === 'none'){
+			section.style.display = '';
+		}
+		else{
+			section.style.display = 'none';
+		}
+	}	
+};
+var doSend = function() {
+	var toSendInput = document.getElementById("toSend");
+    var message = toSendInput.value;
+    if(message != "") {
+        console.debug('this.push(\'messages\', {class: "sent", value: '+message+'})');
+		addBubble(message,"sent");
+        this.fastFlicker.send(message);
+		toSendInput.value = '';
+    }
+};
+var addBubble = function(message, classToSet) {
+	console.debug('adding bubble');
+	var bodyElement = document.getElementById("chatBookMarklet_bodyId");
+    var newdiv = document.createElement('div');
+	newdiv.setAttribute('class', 'chat-bubble '+classToSet);
+	newdiv.innerHTML = message;
+	bodyElement.appendChild(newdiv);
+};
+
+var changeIndicator = function(newColor,newTooltip){
+	var indicator = document.getElementById("connectionIndicator");
+	indicator.style.backgroundColor = newColor;
+	indicator.title = newTooltip;
 };
 
 var LiteEvent = (function () {
