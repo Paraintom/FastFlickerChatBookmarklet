@@ -30,24 +30,31 @@ var addChat = function(){
 	htmlToAdd+="</div>";	
 	document.body.innerHTML += htmlToAdd;
 	
-	var url = "ws://91.125.244.57:8099/";
-	var subject = location.hostname;
-	console.log("component ready, fastFlicker url ="+url+" subject="+subject);
+	var onSuccess = function(url){
+		var subject = location.hostname;
+		console.log("Chat ready, fastFlicker url ="+url+" subject="+subject);
 
-	fastFlicker = new FastFlickerClient(url, subject);
-	fastFlicker.onMessage().subscribe(function (message) {
-		addBubble(message,"received");
-	});
-	fastFlicker.onError().subscribe(function (a) {
-		console.log('currentComponent.header = "Error, see console logs"');
-		changeIndicator('red', 'errors');
-	});
-	fastFlicker.onReady().subscribe(function () {
-		console.log("fastFlicker ready");
-		changeIndicator('green', 'connected');
-	});
+		fastFlicker = new FastFlickerClient(url, subject);
+		fastFlicker.onMessage().subscribe(function (message) {
+			addBubble(message,"received");
+		});
+		fastFlicker.onError().subscribe(function (a) {
+			console.log('currentComponent.header = "Error, see console logs"');
+			changeIndicator('red', 'errors');
+		});
+		fastFlicker.onReady().subscribe(function () {
+			console.log("fastFlicker ready");
+			changeIndicator('green', 'connected');
+		});
 
-	fastFlicker.open();
+		fastFlicker.open();
+	};
+	
+	var onError = function(url){
+		console.log('error');
+	};
+	
+	getFastFlickerUrl(onSuccess, onError);
 	
 	var btn = document.getElementById("collapseButon");
 	btn.onclick = function(){
@@ -60,6 +67,39 @@ var addChat = function(){
 		}
 	}	
 };
+
+var getFastFlickerUrl = function(onSuccess, onError) {
+	var url = "http://www.olivettom.com/hb/index.php?get=FastFlicker";	
+	var xhr = createCORSRequest('GET', url);
+	if (!xhr) {
+		alert('CORS not supported');
+		return;
+	}
+	xhr.onload = function() {
+		var text = xhr.responseText.trim();
+		console.debug('Response from CORS request to ' + url + ': ' + text);
+		onSuccess("ws://"+text+"/");
+	};
+
+	xhr.onerror = function() {
+		onError();
+	};
+	xhr.send();
+};
+
+function createCORSRequest(method, url) {
+  var xhr = new XMLHttpRequest();
+  if ("withCredentials" in xhr) {
+    xhr.open(method, url, true);
+  } else if (typeof XDomainRequest != "undefined") {
+    xhr = new XDomainRequest();
+    xhr.open(method, url);
+  } else {
+    xhr = null;
+  }
+  return xhr;
+}
+
 var doSend = function() {
 	var toSendInput = document.getElementById("toSend");
     var message = toSendInput.value;
