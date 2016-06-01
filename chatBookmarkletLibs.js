@@ -16,11 +16,11 @@ var addChat = function(){
 	htmlToAdd+="      Titre_ti <span id='collapseButon' style='position: absolute;top: 0px;right: 5px;width: 15px;font-size:20px;'>-</span>";
 	htmlToAdd+="   </div>";
 	htmlToAdd+="   <div id='chatBookMarklet_toCollapseId' >";
-	htmlToAdd+="      <div id='chatBookMarklet_bodyId' style='width:90%;background-color:#efefef;padding: 1% 5%;display: inline-block;'>";
+	htmlToAdd+="      <div id='chatBookMarklet_bodyId' style='width:90%;background-color:gainsboro;padding: 1% 5%;display: inline-block;'>";
 	htmlToAdd+="         <div class='chat-bubble'> Welcome in Chatons!";
 	htmlToAdd+="         </div>";
 	htmlToAdd+="      </div>";
-	htmlToAdd+="      <div id='chatBookMarklet_footerId' style='width:100%;padding:10px 5%;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;'>";
+	htmlToAdd+="      <div id='chatBookMarklet_footerId' style='background-color:#efefef;width:100%;padding:10px 5%;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;'>";
 	htmlToAdd+="         <form action='' onsubmit='return false' autocomplete='off' >";
 	htmlToAdd+="            <input id='toSend' type='' style='width:80%;' />";
 	htmlToAdd+="            <button onClick='doSend()' value='notUsed' style='background-color: #462343;-moz-border-radius:6px;-webkit-border-radius:6px;border-radius:6px;border:1px solid #7f3b7c;display:inline-block;cursor:pointer;color:#ffffff;font-family:arial;font-size:12px;padding:5px 8px;text-decoration:none;'>Send</button>";	
@@ -98,9 +98,9 @@ function createCORSRequest(method, url) {
     xhr = null;
   }
   return xhr;
-}
+};
 
-var doSend = function() {
+doSend = function() {
 	var toSendInput = document.getElementById("toSend");
     var message = toSendInput.value;
     if(message != "") {
@@ -109,6 +109,7 @@ var doSend = function() {
 		toSendInput.value = '';
     }
 };
+
 var addBubble = function(message, classToSet) {
 	var bodyElement = document.getElementById("chatBookMarklet_bodyId");
     var newdiv = document.createElement('div');
