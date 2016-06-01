@@ -31,12 +31,11 @@ var addChat = function(){
 	document.body.innerHTML += htmlToAdd;
 	
 	var url = "ws://91.125.244.57:8099/";
-	var subject = "To calculate from current url!";
+	var subject = location.hostname;
 	console.log("component ready, fastFlicker url ="+url+" subject="+subject);
 
 	fastFlicker = new FastFlickerClient(url, subject);
 	fastFlicker.onMessage().subscribe(function (message) {
-		console.log('currentComponent.push(\'messages\', {class : "received", value : a});');
 		addBubble(message,"received");
 	});
 	fastFlicker.onError().subscribe(function (a) {
@@ -65,14 +64,12 @@ var doSend = function() {
 	var toSendInput = document.getElementById("toSend");
     var message = toSendInput.value;
     if(message != "") {
-        console.debug('this.push(\'messages\', {class: "sent", value: '+message+'})');
 		addBubble(message,"sent");
         this.fastFlicker.send(message);
 		toSendInput.value = '';
     }
 };
 var addBubble = function(message, classToSet) {
-	console.debug('adding bubble');
 	var bodyElement = document.getElementById("chatBookMarklet_bodyId");
     var newdiv = document.createElement('div');
 	newdiv.setAttribute('class', 'chat-bubble '+classToSet);
