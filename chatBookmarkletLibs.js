@@ -13,7 +13,7 @@ var addChat = function(){
 	htmlToAdd+="<div id='chatBookMarklet_Id' style='font-family: Arial;position:fixed;bottom:0px;right:10px;width:320px;border-left:1px solid #000000;border-right:1px solid #000000;'>";
 	htmlToAdd+="   <div id='chatBookMarklet_HeaderId' style='width:100%;background-color: #462343;display: inline-block;padding:5px;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;color:#ffffff;'>";
 	htmlToAdd+="      <span id='connectionIndicator' style='display: inline-block;margin-left:5px;margin-top:5px;width: 15px;height: 15px;background-color : orange;' title='connecting...'></span>";
-	htmlToAdd+="      Titre_ti <span id='collapseButon' style='position: absolute;top: 0px;right: 5px;width: 15px;font-size:20px;'>-</span>";
+	htmlToAdd+="      <span id='chatHeaderTitleId'>Titre_ti</span> <span id='collapseButon' style='position: absolute;top: 0px;right: 5px;width: 15px;font-size:20px;'>-</span>";
 	htmlToAdd+="   </div>";
 	htmlToAdd+="   <div id='chatBookMarklet_toCollapseId' >";
 	htmlToAdd+="      <div id='chatBookMarklet_bodyId' style='width:90%;background-color:gainsboro;padding: 1% 5%;display: inline-block;'>";
@@ -31,8 +31,10 @@ var addChat = function(){
 	document.body.innerHTML += htmlToAdd;
 	
 	var onSuccess = function(url){
+		
 		var subject = location.hostname;
 		console.log("Chat ready, fastFlicker url ="+url+" subject="+subject);
+		changeTitle(subject);
 
 		fastFlicker = new FastFlickerClient(url, subject);
 		fastFlicker.onMessage().subscribe(function (message) {
@@ -52,6 +54,7 @@ var addChat = function(){
 	
 	var onError = function(url){
 		console.log('error');
+		changeTitle('error!');
 	};
 	
 	getFastFlickerUrl(onSuccess, onError);
@@ -122,6 +125,11 @@ var changeIndicator = function(newColor,newTooltip){
 	var indicator = document.getElementById("connectionIndicator");
 	indicator.style.backgroundColor = newColor;
 	indicator.title = newTooltip;
+};
+
+var changeTitle = function(newTitle){
+	var indicator = document.getElementById("chatHeaderTitleId");
+	indicator.innerHTML= newTitle;
 };
 
 var LiteEvent = (function () {
