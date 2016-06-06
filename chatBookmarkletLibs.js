@@ -44,6 +44,10 @@ var addChat = function(){
 			console.log('currentComponent.header = "Error, see console logs"');
 			changeIndicator('red', 'errors');
 		});
+		fastFlicker.onClose().subscribe(function () {
+			console.log('connection closed!');
+			changeIndicator('red', 'connection closed');
+		});
 		fastFlicker.onReady().subscribe(function () {
 			console.log("fastFlicker ready");
 			changeIndicator('green', 'connected');
@@ -170,6 +174,7 @@ var FastFlickerClient = (function () {
         this.onReadyEvent = new LiteEvent();
         this.onMessageEvent = new LiteEvent();
         this.onErrorEvent = new LiteEvent();
+        this.onCloseEvent = new LiteEvent();
         this.url = url;
         this.subject = subject;
     }
@@ -181,7 +186,7 @@ var FastFlickerClient = (function () {
                 _this.onOpen(evt);
             };
             this.websocket.onclose = function (evt) {
-                _this.onClose(evt);
+                _this.onCloseReceived(evt);
             };
             this.websocket.onmessage = function (evt) {
                 _this.onMessageReceived(evt);
@@ -200,8 +205,8 @@ var FastFlickerClient = (function () {
         this.onReadyEvent.raise();
     };
 
-    FastFlickerClient.prototype.onClose = function (evt) {
-        console.debug('onClose for ' + this.subject);
+    FastFlickerClient.prototype.onCloseReceived = function (evt) {
+        this.onCloseEvent.raise();
     };
 
     FastFlickerClient.prototype.onMessageReceived = function (evt) {
@@ -251,6 +256,10 @@ var FastFlickerClient = (function () {
 
     FastFlickerClient.prototype.onError = function () {
         return this.onErrorEvent;
+    };
+	
+    FastFlickerClient.prototype.onClose = function () {
+        return this.onCloseEvent;
     };
     return FastFlickerClient;
 })();
