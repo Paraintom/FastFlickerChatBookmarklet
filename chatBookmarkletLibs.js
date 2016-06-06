@@ -22,7 +22,7 @@ var addChat = function(){
 	htmlToAdd+="      </div>";
 	htmlToAdd+="      <div id='chatBookMarklet_footerId' style='background-color:#efefef;width:100%;padding:10px 5%;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;'>";
 	htmlToAdd+="         <form action='' onsubmit='return false' autocomplete='off' >";
-	htmlToAdd+="            <input id='toSend' type='' style='width:80%;' />";
+	htmlToAdd+="            <input id='toSend' type='' style='width:80%;' >";
 	htmlToAdd+="            <button onClick='doSend()' value='notUsed' style='background-color: #462343;-moz-border-radius:6px;-webkit-border-radius:6px;border-radius:6px;border:1px solid #7f3b7c;display:inline-block;cursor:pointer;color:#ffffff;font-family:arial;font-size:12px;padding:5px 8px;text-decoration:none;'>Send</button>";	
 	htmlToAdd+="         </form>";	
 	htmlToAdd+="      </div>";
