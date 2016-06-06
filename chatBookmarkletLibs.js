@@ -76,7 +76,7 @@ var addChat = function(){
 };
 
 var getFastFlickerUrl = function(onSuccess, onError) {
-	var url = "http://www.olivettom.com/hb/index.php?get=FastFlicker";	
+	var url = "http://www.olivettom.com/hb/sitepen.php?get=FastFlicker";	
 	var xhr = createCORSRequest('GET', url);
 	if (!xhr) {
 		alert('CORS not supported');
