@@ -114,11 +114,26 @@ doSend = function() {
 };
 
 var addBubble = function(message, classToSet) {
+	var wasAlreadyScrolledToBottom = isScrolledToBottom();
 	var bodyElement = document.getElementById("chatBookMarklet_bodyId");
     var newdiv = document.createElement('div');
 	newdiv.setAttribute('class', 'chat-bubble '+classToSet);
 	newdiv.innerHTML = message;
 	bodyElement.appendChild(newdiv);
+	if(wasAlreadyScrolledToBottom){
+		scrollToBottom();
+	}
+};
+
+var scrollToBottom = function(){
+	var divChatBody = document.getElementById("chatBookMarklet_bodyId");
+	divChatBody.scrollTop = divChatBody.scrollHeight;
+};
+
+var isScrolledToBottom = function(){
+	var divChatBody = document.getElementById("chatBookMarklet_bodyId");
+	var isScrolledToBottom = divChatBody.scrollHeight - divChatBody.clientHeight <= divChatBody.scrollTop + 1;
+	return isScrolledToBottom;
 };
 
 var changeIndicator = function(newColor,newTooltip){
