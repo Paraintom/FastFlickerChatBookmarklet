@@ -16,7 +16,7 @@ var addChat = function(){
 	htmlToAdd+="      <span id='chatHeaderTitleId'>Titre_ti</span> <span id='collapseButon' style='position: absolute;top: 0px;right: 5px;width: 15px;font-size:20px;'>-</span>";
 	htmlToAdd+="   </div>";
 	htmlToAdd+="   <div id='chatBookMarklet_toCollapseId'>";
-	htmlToAdd+="      <div id='chatBookMarklet_bodyId' style='max-height:300px;overflow: auto;width:90%;background-color:gainsboro;padding: 1% 5%;display: inline-block;'>";
+	htmlToAdd+="      <div id='chatBookMarklet_bodyId' style='max-height:300px;overflow: auto;background-color:gainsboro;padding: 1% 5%;display: inline-block;'>";
 	htmlToAdd+="         <div class='chat-bubble'> Welcome in AddChat. Everyone connected to the same site is now able to talk with you!";
 	htmlToAdd+="         </div>";
 	htmlToAdd+="      </div>";
